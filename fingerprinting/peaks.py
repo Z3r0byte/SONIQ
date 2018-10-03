@@ -12,6 +12,8 @@ def find_peaks(spectrum, window):
     for spectrum_row in range(0, spectrum_length):  # select row
         freq_array = spectrum[spectrum_row]
         for freq_array_index in range(0, freq_length):  # select point in row to test if peak
+            if freq_array[freq_array_index] < 0.1:
+                continue
             for spectrum_row2 in range(-window, window):  # select test-row to check for higher values
                 index_sum = spectrum_row + spectrum_row2
                 if index_sum < 0 or index_sum >= spectrum_length:  # check if index is out of bounds
@@ -23,7 +25,7 @@ def find_peaks(spectrum, window):
                     if index_sum < 0 or index_sum >= freq_length:
                         continue
                     # check if selected point is bigger than the point being tested
-                    if freq_array2[index_sum] > freq_array[freq_array_index] or freq_array[freq_array_index] < 0.1:
+                    if freq_array2[index_sum] > freq_array[freq_array_index]:
                         break
                 else:
                     continue
