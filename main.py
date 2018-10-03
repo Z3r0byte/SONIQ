@@ -1,5 +1,6 @@
 import fingerprinting.fourier_transform as fourier
 import fingerprinting.peaks as peaks
+import fingerprinting.fingerprint as fingerprint
 from scipy.io.wavfile import read
 import matplotlib.pyplot as plt
 
@@ -11,7 +12,8 @@ intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
 #fourier.plot_intensity_of_freq_over_time(intensity, time, freqs, 162)
 
 peaks_array = peaks.find_peaks(intensity, 20)
-print len(peaks_array)
+fingerprint.fingerprint(peaks_array)
+
 print peaks_array
 x = []
 y = []

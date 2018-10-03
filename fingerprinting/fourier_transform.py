@@ -1,5 +1,4 @@
 import matplotlib.pyplot as plt
-import numpy as np
 
 
 def plot_specgram(signal, NFFT, sample_freq, noverlap):
