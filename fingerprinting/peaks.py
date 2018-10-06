@@ -1,4 +1,4 @@
-def find_peaks(spectrum, window):
+def find_peaks(spectrum, xwindow, ywindow):
     """
 
     :param spectrum: the 2-D spectrum array
@@ -14,13 +14,13 @@ def find_peaks(spectrum, window):
         for freq_array_index in range(0, freq_length):  # select point in row to test if peak
             if freq_array[freq_array_index] < 0.1:
                 continue
-            for spectrum_row2 in range(-window, window):  # select test-row to check for higher values
+            for spectrum_row2 in range(-ywindow, ywindow + 1):  # select test-row to check for higher values
                 index_sum = spectrum_row + spectrum_row2
                 if index_sum < 0 or index_sum >= spectrum_length:  # check if index is out of bounds
                     continue
 
                 freq_array2 = spectrum[index_sum]
-                for freq_array_index2 in range(-window, window):  # select test-point from test-row to check for higher values
+                for freq_array_index2 in range(-xwindow, xwindow + 1):  # select test-point from test-row to check for higher values
                     index_sum = freq_array_index + freq_array_index2  # check if index is out of bounds
                     if index_sum < 0 or index_sum >= freq_length:
                         continue

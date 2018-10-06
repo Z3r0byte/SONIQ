@@ -11,7 +11,7 @@ intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
 #fourier.plot_specgram(signal, 1024, sample_freq, 256)
 #fourier.plot_intensity_of_freq_over_time(intensity, time, freqs, 162)
 
-peaks_array = peaks.find_peaks(intensity, 20)
+peaks_array = peaks.find_peaks(intensity, 20, 10)
 fingerprint.fingerprint(peaks_array)
 
 print peaks_array
