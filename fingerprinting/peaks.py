@@ -2,7 +2,8 @@ def find_peaks(spectrum, xwindow, ywindow):
     """
 
     :param spectrum: the 2-D spectrum array
-    :param window:  search-window, bigger number means less peaks
+    :param xwindow: search-window in time in which to search for higher values
+    :param ywindow: search-window in frequency in which to search for higher values
     :return:
     :rtype: 2-D array of peaks in spectrum
     """
