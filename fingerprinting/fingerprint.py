@@ -1,12 +1,20 @@
 import hashlib
-import time
+
 
 def fingerprint(peaks, xwindow=10, ywindow=5):
+    """
+    :returns een array van arrays met twee waarden. De eerste waarde is een SHA256 bits hash (de
+        vingerafdruk) en de tweede waarde is het tijdstip van de hash
+    :param peaks: de 2D array met pieken
+    :param xwindow: Hoever vooruit gekeken moet worden om twee pieken te matchen tot een vingerafdruk
+    :param ywindow: Hoeveel frequentiebanden er naar boven en naar benden gekeken moet worden om
+        een vingerafdruk te maken
+    :return:
+    """
     hashes = []
     index = generate_index(peaks)
     index_len = len(index)
     peaks_len = len(peaks)
-    i=0
     for peak in peaks:
         peaky = peak[0]
         peakx = peak[1]
@@ -27,7 +35,6 @@ def fingerprint(peaks, xwindow=10, ywindow=5):
             else:
                 stop_search = peaks_len
             for peak_test_index in range(start_search, stop_search):
-                i += 1
                 peak_test = peaks[peak_test_index]
                 if peak_test[0] != peak_test_row_index:
                     break
@@ -36,17 +43,24 @@ def fingerprint(peaks, xwindow=10, ywindow=5):
 
                 if (ywindow_low <= peak_test[0] <= ywindow_high) and (
                         xwindow_low <= peak_test[1] <= xwindow_high):
-                    hash = hashlib.sha256(str(peaky) + "-" + str(peak_test[0]) + "-" + str(peak_test[1] - peakx)).hexdigest()
+                    hash = ["", 0]
+                    hash[0] = hashlib.sha256(str(peaky) + "-" + str(peak_test[0]) + "-" + str(peak_test[1] - peakx)).hexdigest()
+                    hash[1] = peakx
                     hashes.append(hash)
                 elif peak_test[1] <= xwindow_high:
                     continue
                 else:
                     break
-    print i
     return hashes
 
 
 def generate_index(peaks):
+    """
+    :returns een index met de index van de eerst voorkomende piek met een bepaalde frequentie, wanneer
+        er geen piek is met een frequentie wordt de index van de frequentie daarvoor gebruikt
+    :param peaks: 2D array van pieken
+    :return: 1D array van indexes
+    """
     index = []
     index_index = 0
     peak_index = 0
