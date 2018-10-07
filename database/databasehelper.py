@@ -5,7 +5,7 @@ DATABASE = "SONIQ"
 USER = "root"
 PASSWORD = "password"
 
-conn = mysql.connect(host=HOST, user=USER, passwd=PASSWORD, database=DATABASE)
+conn = mysql.connect(host=HOST, user=USER, passwd=PASSWORD, database=DATABASE, charset='utf8')
 cursor = conn.cursor()
 
 
@@ -19,9 +19,27 @@ def insert_song(filename, title="", artist=""):
     return cursor.lastrowid
 
 
-def fingerprint_song(filename):
-    query = "UPDATE songs SET fingerprinted = 1 WHERE filename = %s"
-    args = (filename,)
+def fingerprint_song(song_id):
+    query = "UPDATE songs SET fingerprinted = 1 WHERE id = %s"
+    args = (song_id,)
+    cursor.execute(query, args)
+    conn.commit()
+
+
+def is_fingerprinted(song_id):
+    query = "SELECT fingerprinted FROM songs WHERE id = %s"
+    args = (song_id,)
+    cursor.execute(query, args)
+    fingerprinted = cursor.fetchone()
+    if fingerprinted[0] == 1:
+        return True
+    else:
+        return False
+
+
+def remove_fingerprints_for_song(song_id):
+    query = "DELETE FROM fingerprints WHERE song_id = %s"
+    args = (song_id,)
     cursor.execute(query, args)
     conn.commit()
 
@@ -38,6 +56,5 @@ def get_song_id(filename):
 
 def insert_hashes(fingerprints):
     query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (%s, %s, %s)"
-    args = (fingerprints,)
-    cursor.executemany(query, args)
+    cursor.executemany(query, fingerprints)
     conn.commit()
