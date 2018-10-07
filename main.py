@@ -12,6 +12,7 @@ import database.databasehelper as dbhelper
 AUDIO_DIR = "Audio Samples/Top 2000"
 file_array = files.find_all_files(AUDIO_DIR)
 for file in file_array:
+    path = file
     file = file.decode(sys.getfilesystemencoding()).encode("UTF8")  # bug oplossen die MySQL liet crashen door ongeldig karakter (é)
     artist, title = files.artist_title(file)
     song_id = dbhelper.insert_song(file, title, artist)
@@ -22,7 +23,7 @@ for file in file_array:
     start_time = t.time()
     dbhelper.remove_fingerprints_for_song(song_id)
 
-    sample_freq, signal = read(os.path.join(AUDIO_DIR, file))
+    sample_freq, signal = read(os.path.join(AUDIO_DIR, path))
     intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
     peaks_array = peaks.find_peaks(intensity, 5, 5)
     hashes = fingerprint.fingerprint(peaks_array, 20, 10)
