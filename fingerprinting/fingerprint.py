@@ -44,7 +44,7 @@ def fingerprint(peaks, xwindow=10, ywindow=5):
                 if (ywindow_low <= peak_test[0] <= ywindow_high) and (
                         xwindow_low <= peak_test[1] <= xwindow_high):
                     hash = ["", 0]
-                    hash[0] = hashlib.sha256(str(peaky) + "-" + str(peak_test[0]) + "-" + str(peak_test[1] - peakx)).hexdigest()[0:8]
+                    hash[0] = hashlib.sha256(str(peaky) + "-" + str(peak_test[0]) + "-" + str(peak_test[1] - peakx)).hexdigest()[0:16]  # hex encoding, dus 16 tekens is 8 bytes
                     hash[1] = peakx
                     hashes.append(hash)
                 elif peak_test[1] <= xwindow_high:

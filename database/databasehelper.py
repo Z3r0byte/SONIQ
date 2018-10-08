@@ -55,6 +55,6 @@ def get_song_id(filename):
 
 
 def insert_hashes(fingerprints):
-    query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (%s, %s, %s)"
+    query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (UNHEX(%s), %s, %s)"
     cursor.executemany(query, fingerprints)
     conn.commit()
