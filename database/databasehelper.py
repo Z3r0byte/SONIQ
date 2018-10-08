@@ -58,3 +58,11 @@ def insert_hashes(fingerprints):
     query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (UNHEX(%s), %s, %s)"
     cursor.executemany(query, fingerprints)
     conn.commit()
+
+
+def get_songs_with_fingerprints(fingerprints):
+    placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
+    query = "SELECT song_id, COUNT(*) as cnt FROM (SELECT song_id FROM fingerprints WHERE fingerprint IN (%s) GROUP BY song_id,fingerprint) tmp GROUP BY song_id ORDER BY cnt DESC" % placeholder
+    args = tuple(fingerprints)
+    cursor.execute(query, args)
+    return cursor.fetchall()
