@@ -13,23 +13,21 @@
 
 
 -- Databasestructuur van soniq wordt geschreven
-DROP DATABASE IF EXISTS `soniq`;
 CREATE DATABASE IF NOT EXISTS `soniq` /*!40100 DEFAULT CHARACTER SET utf8 */;
 USE `soniq`;
 
 -- Structuur van  tabel soniq.fingerprints wordt geschreven
-DROP TABLE IF EXISTS `fingerprints`;
 CREATE TABLE IF NOT EXISTS `fingerprints` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fingerprint` char(64) NOT NULL DEFAULT '0',
-  `song_id` int(11) NOT NULL DEFAULT 0,
-  `offset` int(11) DEFAULT 0,
-  KEY `id` (`id`)
+  `fingerprint` binary(8) NOT NULL DEFAULT '0\0\0\0\0\0\0\0',
+  `song_id` smallint(5) unsigned NOT NULL DEFAULT 0,
+  `offset` mediumint(8) unsigned DEFAULT 0,
+  KEY `id` (`id`),
+  KEY `fingerprint_index` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporteren was gedeselecteerd
 -- Structuur van  tabel soniq.songs wordt geschreven
-DROP TABLE IF EXISTS `songs`;
 CREATE TABLE IF NOT EXISTS `songs` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `filename` char(100) DEFAULT '0',
