@@ -22,21 +22,24 @@ def fingerprint(peaks, xwindow=10, ywindow=5):
         ywindow_high = peaky + ywindow
         xwindow_low = peakx
         xwindow_high = peakx + xwindow
-        for peak_test_row in range(-ywindow, ywindow + 1):
-            peak_test_row_index = peaky + peak_test_row
-            if peak_test_row_index >= index_len:
+        for peak_test_row in range(ywindow_low, ywindow_high + 1):
+            if peak_test_row >= index_len:
                 break
-            if peak_test_row_index < 0:
+            if peak_test_row < 0:
                 continue
 
-            start_search = index[peak_test_row_index]
-            if peak_test_row_index < (len(index) - 1):
-                stop_search = index[peak_test_row_index + 1]
+            start_search = index[peak_test_row]
+            if peak_test_row < (len(index) - 1):
+                stop_search = index[index_len - 1]
+                for addition in range(0, index_len - peak_test_row - 1):
+                    if index[peak_test_row + addition] != index[peak_test_row]:
+                        stop_search = index[peak_test_row + addition]
+                        break
             else:
                 stop_search = peaks_len
             for peak_test_index in range(start_search, stop_search):
                 peak_test = peaks[peak_test_index]
-                if peak_test[0] != peak_test_row_index:
+                if peak_test[0] != peak_test_row:
                     break
                 if peak_test == peak:
                     continue
