@@ -27,8 +27,8 @@ def fingerprint_all(AUDIO_DIR):
 
         sample_freq, signal = read(os.path.join(AUDIO_DIR, path))
         intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
-        peaks_array = peaks.find_peaks(intensity, 5, 5)
-        hashes = fingerprint.fingerprint(peaks_array, 20, 10)
+        peaks_array = peaks.find_peaks(intensity, 10, 10)
+        hashes = fingerprint.fingerprint(peaks_array, 200, 20)
 
         fingerprint_data = []
         for hash in hashes:
