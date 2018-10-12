@@ -54,6 +54,13 @@ def get_song_id(filename):
     return None
 
 
+def get_song_by_id(id):
+    query = "SELECT title, artist FROM songs WHERE id = %s"
+    args = (id,)
+    cursor.execute(query, args)
+    return cursor.fetchone()
+
+
 def insert_hashes(fingerprints):
     query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (UNHEX(%s), %s, %s)"
     cursor.executemany(query, fingerprints)
@@ -63,6 +70,14 @@ def insert_hashes(fingerprints):
 def get_songs_with_fingerprints(fingerprints):
     placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
     query = "SELECT song_id, COUNT(*) as cnt FROM (SELECT song_id FROM fingerprints WHERE fingerprint IN (%s) GROUP BY song_id,fingerprint) tmp GROUP BY song_id ORDER BY cnt DESC" % placeholder
+    args = tuple(fingerprints)
+    cursor.execute(query, args)
+    return cursor.fetchall()
+
+
+def get_offsets_for_fingerprints_of_song(fingerprints, song_id):
+    placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
+    query = "SELECT song_id, HEX(fingerprint), offset FROM fingerprints WHERE fingerprint IN (%s) AND song_id = %s GROUP BY song_id,fingerprint" % (placeholder, song_id)
     args = tuple(fingerprints)
     cursor.execute(query, args)
     return cursor.fetchall()
