@@ -62,7 +62,7 @@ def get_song_by_id(id):
 
 
 def insert_hashes(fingerprints):
-    query = "INSERT INTO fingerprints (fingerprint, song_id, offset) VALUES (UNHEX(%s), %s, %s)"
+    query = "INSERT INTO fingerprints (fingerprint, song_id, time) VALUES (UNHEX(%s), %s, %s)"
     cursor.executemany(query, fingerprints)
     conn.commit()
 
@@ -75,9 +75,9 @@ def get_songs_with_fingerprints(fingerprints):
     return cursor.fetchall()
 
 
-def get_offsets_for_fingerprints_of_song(fingerprints, song_id):
+def get_times_for_fingerprints_of_song(fingerprints, song_id):
     placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
-    query = "SELECT song_id, HEX(fingerprint), offset FROM fingerprints WHERE fingerprint IN (%s) AND song_id = %s GROUP BY song_id,fingerprint" % (placeholder, song_id)
+    query = "SELECT song_id, HEX(fingerprint), time FROM fingerprints WHERE fingerprint IN (%s) AND song_id = %s GROUP BY song_id,fingerprint" % (placeholder, song_id)
     args = tuple(fingerprints)
     cursor.execute(query, args)
     return cursor.fetchall()

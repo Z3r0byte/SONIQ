@@ -1,6 +1,6 @@
 -- --------------------------------------------------------
 -- Host:                         127.0.0.1
--- Server versie:                10.3.10-MariaDB - mariadb.org binary distribution
+-- Server versie:                10.2.16-MariaDB - mariadb.org binary distribution
 -- Server OS:                    Win64
 -- HeidiSQL Versie:              9.4.0.5125
 -- --------------------------------------------------------
@@ -19,9 +19,9 @@ USE `soniq`;
 -- Structuur van  tabel soniq.fingerprints wordt geschreven
 CREATE TABLE IF NOT EXISTS `fingerprints` (
   `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `fingerprint` binary(8) NOT NULL DEFAULT '0\0\0\0\0\0\0\0',
   `song_id` smallint(5) unsigned NOT NULL DEFAULT 0,
-  `offset` mediumint(8) unsigned DEFAULT 0,
+  `fingerprint` binary(8) NOT NULL DEFAULT '0\0\0\0\0\0\0\0',
+  `time` mediumint(8) unsigned DEFAULT 0,
   KEY `id` (`id`),
   KEY `fingerprint_index` (`fingerprint`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
