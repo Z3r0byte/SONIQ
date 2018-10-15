@@ -31,6 +31,6 @@ def find_peaks(spectrum, xwindow, ywindow, min_amp=10):
                 else:
                     continue
                 break
-            else:  # if the loop above doesn't kill itself, eg no bigger value found, than add current test point to peaks
+            else:  # if the loop above doesn't kill itself, eg no bigger value found, then add current test point to peaks
                 peaks.append([spectrum_row, freq_array_index])
     return peaks
