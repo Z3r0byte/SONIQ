@@ -13,7 +13,7 @@ files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0007-3.wav")
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0023.wav")
 if sample_freq != SAMPLE_FREQ:
     print "########################################################################################################"
     print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
@@ -27,7 +27,7 @@ fingerprint_dictionary = {}
 for hash in hashes:
     fingerprint_data.append(hash[0])
     fingerprint_dictionary[hash[0]] = hash[1]
-fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)[:100]  # alleen de eerste honderd om tijd te besparen. Er is namelijk een grote kans dat het juiste lied ook een van de meeste overeenkomsten zal hebben
+fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)  # alleen de eerste honderd om tijd te besparen. Er is namelijk een grote kans dat het juiste lied ook een van de meeste overeenkomsten zal hebben
 
 
 confidences = []
