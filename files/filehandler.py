@@ -26,7 +26,7 @@ def fingerprint_all(AUDIO_DIR):
         dbhelper.remove_fingerprints_for_song(song_id)
 
         sample_freq, signal = read(os.path.join(AUDIO_DIR, path))
-        intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
+        intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 512)
         peaks_array = peaks.find_peaks(intensity, 10, 10)
         hashes = fingerprint.fingerprint(peaks_array, 200, 20)
 
