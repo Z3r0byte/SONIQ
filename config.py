@@ -12,6 +12,8 @@ PEAK_TIME_WINDOW = 10
 PEAK_FREQ_WINDOW = 10
 # Vingerafdrukken [!]
 FINGERPRINT_TIME_WINDOW = 20
+# Matchen:
+MIN_CONFIDENCE_FOR_STOP = 25
 # Database
 HOST = "localhost"
 DATABASE = "SONIQ"

@@ -1,5 +1,5 @@
 # coding=utf-8
-from config import AUDIO_DIR, SAMPLE_FREQ, NFFT_WINDOW, N_OVERLAP, PEAK_FREQ_WINDOW, PEAK_TIME_WINDOW, FINGERPRINT_TIME_WINDOW
+from config import AUDIO_DIR, SAMPLE_FREQ, NFFT_WINDOW, N_OVERLAP, PEAK_FREQ_WINDOW, PEAK_TIME_WINDOW, FINGERPRINT_TIME_WINDOW, MIN_CONFIDENCE_FOR_STOP
 import fingerprinting.fourier_transform as fourier
 import fingerprinting.peaks as peaks
 import fingerprinting.fingerprint as fingerprint
@@ -13,7 +13,7 @@ files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0023.wav")
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0059.wav")
 if sample_freq != SAMPLE_FREQ:
     print "########################################################################################################"
     print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
@@ -45,7 +45,10 @@ for match in fingerprint_match_count:
             continue
         else:
             total += pow(diff_freq, 2)
-    confidences.append([match[0], float(total)/len(offsets)])
+    confidence = [match[0], float(total)/len(offsets)]
+    confidences.append(confidence)
+    if confidence[1] >= MIN_CONFIDENCE_FOR_STOP:
+        break
 confidences.sort(key=lambda x: x[1])
 confidences.reverse()
 print confidences
