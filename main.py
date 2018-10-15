@@ -13,8 +13,8 @@ files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0002.wav")
-intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 256)
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0007.wav")
+intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 512)
 peaks_array = peaks.find_peaks(intensity, 10, 10)
 hashes = fingerprint.fingerprint(peaks_array, 200, 20)
 
@@ -27,7 +27,7 @@ fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)
 
 confidences = []
 for match in fingerprint_match_count:
-    offsets = dbhelper.get_offsets_for_fingerprints_of_song(fingerprint_data, match[0])
+    offsets = dbhelper.get_times_for_fingerprints_of_song(fingerprint_data, match[0])
 
     differences = []
     for offset in offsets:
