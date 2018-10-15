@@ -1,9 +1,5 @@
+from config import HOST, USER, PASSWORD, DATABASE
 import mysql.connector as mysql
-
-HOST = "localhost"
-DATABASE = "SONIQ"
-USER = "root"
-PASSWORD = "password"
 
 conn = mysql.connect(host=HOST, user=USER, passwd=PASSWORD, database=DATABASE, charset='utf8')
 cursor = conn.cursor()

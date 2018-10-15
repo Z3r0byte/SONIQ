@@ -1,4 +1,5 @@
 # coding=utf-8
+from config import AUDIO_DIR, SAMPLE_FREQ, NFFT_WINDOW, N_OVERLAP, PEAK_FREQ_WINDOW, PEAK_TIME_WINDOW, FINGERPRINT_TIME_WINDOW
 import fingerprinting.fourier_transform as fourier
 import fingerprinting.peaks as peaks
 import fingerprinting.fingerprint as fingerprint
@@ -8,22 +9,26 @@ import files.filehandler as files
 import database.databasehelper as dbhelper
 import collections
 
-AUDIO_DIR = "Audio Samples/Test set"
 files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0007.wav")
-intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 512)
-peaks_array = peaks.find_peaks(intensity, 10, 10)
-hashes = fingerprint.fingerprint(peaks_array, 200, 20)
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0007-3.wav")
+if sample_freq != SAMPLE_FREQ:
+    print "########################################################################################################"
+    print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
+    print "########################################################################################################"
+intensity, freqs, time = fourier.apply_fourier(signal, NFFT_WINDOW, SAMPLE_FREQ, N_OVERLAP)
+peaks_array = peaks.find_peaks(intensity, PEAK_TIME_WINDOW, PEAK_FREQ_WINDOW)
+hashes = fingerprint.fingerprint(peaks_array, FINGERPRINT_TIME_WINDOW)
 
 fingerprint_data = []
 fingerprint_dictionary = {}
 for hash in hashes:
     fingerprint_data.append(hash[0])
     fingerprint_dictionary[hash[0]] = hash[1]
-fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)[:1000]
+fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)[:100]  # alleen de eerste honderd om tijd te besparen. Er is namelijk een grote kans dat het juiste lied ook een van de meeste overeenkomsten zal hebben
+
 
 confidences = []
 for match in fingerprint_match_count:
@@ -31,7 +36,7 @@ for match in fingerprint_match_count:
 
     differences = []
     for offset in offsets:
-        differences.append(abs(fingerprint_dictionary[str(offset[1]).lower()] - offset[2]))
+        differences.append(round(fingerprint_dictionary[str(offset[1]).lower()] - offset[2], -1))
 
     diff_freqs = collections.Counter(differences)
     total = 0

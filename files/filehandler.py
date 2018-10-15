@@ -1,4 +1,5 @@
 # coding=utf-8
+from config import SAMPLE_FREQ, NFFT_WINDOW, N_OVERLAP, PEAK_FREQ_WINDOW, PEAK_TIME_WINDOW, FINGERPRINT_TIME_WINDOW
 import os
 import re
 import sys
@@ -19,16 +20,19 @@ def fingerprint_all(AUDIO_DIR):
         artist, title = artist_title(file)
         song_id = dbhelper.insert_song(file, title, artist)
         if dbhelper.is_fingerprinted(song_id):
-            print "Skipping %s..." % title
+            print "%s is already in our database, skipping..." % title
             continue
         print "Fingerprinting %s by %s..." % (title, artist)
         start_time = t.time()
         dbhelper.remove_fingerprints_for_song(song_id)
 
         sample_freq, signal = read(os.path.join(AUDIO_DIR, path))
-        intensity, freqs, time = fourier.apply_fourier(signal, 1024, sample_freq, 512)
-        peaks_array = peaks.find_peaks(intensity, 10, 10)
-        hashes = fingerprint.fingerprint(peaks_array, 200, 20)
+        if sample_freq != SAMPLE_FREQ:
+            print "    WARNING: sample frequency is not the same as the one in config, skipping..."
+            continue
+        intensity, freqs, time = fourier.apply_fourier(signal, NFFT_WINDOW, SAMPLE_FREQ, N_OVERLAP)
+        peaks_array = peaks.find_peaks(intensity, PEAK_TIME_WINDOW, PEAK_FREQ_WINDOW)
+        hashes = fingerprint.fingerprint(peaks_array, FINGERPRINT_TIME_WINDOW)
 
         fingerprint_data = []
         for hash in hashes:
