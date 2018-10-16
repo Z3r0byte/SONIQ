@@ -6,7 +6,7 @@ import matching.match as match
 files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
-match, confidence, song_id, result, time = match.match_file("Audio Samples/Opnames/Testopname-0059.wav")
+match, confidences, song_id, result, time = match.match_file("Audio Samples/Opnames/Testopname-0000-2.wav")
 if match:
     print result
 else:

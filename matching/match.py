@@ -11,8 +11,8 @@ import collections
 def match_file(path):
     """
     Matcht een bestand aan de origineel in de database
-    :rtype: bool, float, int, string, float
-    :return: Match, confidence, song id, resultaat, tijd
+    :rtype: bool, array([int, float]), int, string, float
+    :return: Match, confidences, song id, resultaat, tijd
     :param path: Path to the file te match
     """
     start_time = t.time()
@@ -60,12 +60,11 @@ def match_file(path):
             break
     confidences.sort(key=lambda x: x[1])
     confidences.reverse()
-    print confidences
     matched_song = dbhelper.get_song_by_id(confidences[0][0])
 
     if len(confidences) == 1:
-        return True, confidences[0][1], confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
     elif confidences[0][1] > (2 * confidences[1][1]):
-        return True, confidences[0][1], confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
     else:
-        return False, confidences[0][1], confidences[0][0], "Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return False, confidences, confidences[0][0], "Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
