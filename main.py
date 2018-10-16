@@ -13,7 +13,7 @@ files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0167.wav")
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0000-0.wav")
 if sample_freq != SAMPLE_FREQ:
     print "########################################################################################################"
     print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
@@ -21,6 +21,10 @@ if sample_freq != SAMPLE_FREQ:
 intensity, freqs, time = fourier.apply_fourier(signal, NFFT_WINDOW, SAMPLE_FREQ, N_OVERLAP)
 peaks_array = peaks.find_peaks(intensity, PEAK_TIME_WINDOW, PEAK_FREQ_WINDOW)
 hashes = fingerprint.fingerprint(peaks_array, FINGERPRINT_TIME_WINDOW)
+
+if len(hashes) == 0:
+    print "    Unable to generate hashes. Not enough peaks? No match."
+    exit()
 
 fingerprint_data = []
 fingerprint_dictionary = {}
