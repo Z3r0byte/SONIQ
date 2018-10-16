@@ -13,7 +13,7 @@ files.fingerprint_all(AUDIO_DIR)
 
 print "Matching song...."
 start_time = t.time()
-sample_freq, signal = read("Audio Samples/Opnames/Testopname-0059.wav")
+sample_freq, signal = read("Audio Samples/Opnames/Testopname-0167.wav")
 if sample_freq != SAMPLE_FREQ:
     print "########################################################################################################"
     print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
@@ -29,6 +29,9 @@ for hash in hashes:
     fingerprint_dictionary[hash[0]] = hash[1]
 fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)  # alleen de eerste honderd om tijd te besparen. Er is namelijk een grote kans dat het juiste lied ook een van de meeste overeenkomsten zal hebben
 
+if len(fingerprint_match_count) == 0:
+    print "    Did not find any similarities in database. No match."
+    exit()
 
 confidences = []
 for match in fingerprint_match_count:
@@ -53,5 +56,11 @@ confidences.sort(key=lambda x: x[1])
 confidences.reverse()
 print confidences
 matched_song = dbhelper.get_song_by_id(confidences[0][0])
-print "    Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1])
+
+if len(confidences) == 1:
+    print "    Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1])
+elif confidences[0][1] > (2 * confidences[1][1]):
+    print "    Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1])
+else:
+    print "    Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1])
 print "    Matched in %f seconds" % (t.time() - start_time)
