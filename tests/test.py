@@ -5,6 +5,10 @@ import math
 
 
 def run_tests(sample_dir):
+    """
+    Test alle bestanden in de opgegeven map en berekend gemiddeldes, percentages, etc. van de matches
+    :param sample_dir: Bestandspad naar de map met fragmenten om te testen
+    """
     print "Running tests..."
     sample_files = file.find_all_files(sample_dir)
     results = []  # [[success, correct, filename, time, confidence, found_id],...]
@@ -54,6 +58,11 @@ def run_tests(sample_dir):
 
 
 def get_95_percentile(times):
+    """
+    Berekent onder welk getal minimaal 95% van de getallen in de opgegeven array ligt
+    :param times: array met getallen
+    :return: Het getal waaronder 95% van de getallen ligt
+    """
     times.sort()
     length = len(times)
     last_5_percent = int(math.ceil(length * 0.95))

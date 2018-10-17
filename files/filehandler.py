@@ -12,6 +12,10 @@ import time as t
 
 
 def fingerprint_all(AUDIO_DIR):
+    """
+    Maakt vingerafdrukken van alle WAVE bestanden in de opgegeven map in zet voegt deze toe aan de database indien deze nog niet erin staan.
+    :param AUDIO_DIR: Het pad naar de map met audiobestanden
+    """
     file_array = find_all_files(AUDIO_DIR)
     for file in file_array:
         path = file
@@ -72,6 +76,12 @@ def artist_title(filename):
 
 
 def get_song_id_from_filename(filename):
+    """
+    Bepaald het 4-cijferige id van het nummer uit de bestandsnaam. Indien er geen geldig id in de bestandsnaam zit, is succes False en id 0.
+    :rtype: bool, int
+    :param filename: De bestandsnaam met het song-id.
+    :return: succes (bool), id (int)
+    """
     if re.search("([0-9]{4})", filename, flags=0) is not None:
         return True, int(re.search("([0-9]{4})", filename, flags=0).group(0))
     else:

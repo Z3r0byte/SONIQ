@@ -1,5 +1,6 @@
 import hashlib
 
+
 def fingerprint(peaks, timewindow):
     """
     :returns een array van arrays met twee waarden (vingerafdrukken). De eerste waarde is een SHA512 bits hash en de tweede waarde is het tijdstip van de hash
