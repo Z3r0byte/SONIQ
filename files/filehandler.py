@@ -69,3 +69,10 @@ def artist_title(filename):
     if dash_index is -1:
         return "", filename
     return filename[:dash_index - 1], filename[dash_index + 2:]
+
+
+def get_song_id_from_filename(filename):
+    if re.search("([0-9]{4})", filename, flags=0) is not None:
+        return True, int(re.search("([0-9]{4})", filename, flags=0).group(0))
+    else:
+        return False, 0

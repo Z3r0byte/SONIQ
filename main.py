@@ -1,13 +1,8 @@
 # coding=utf-8
 from config import AUDIO_DIR
 import files.filehandler as files
-import matching.match as match
+import tests.test as tests
 
-files.fingerprint_all(AUDIO_DIR)
+# files.fingerprint_all(AUDIO_DIR)
 
-print "Matching song...."
-match, confidences, song_id, result, time = match.match_file("Audio Samples/Opnames/Testopname-0000-2.wav")
-if match:
-    print result
-else:
-    print "Geen resultaat"
+tests.run_tests("Audio Samples/Opnames")
