@@ -2,6 +2,7 @@ import files.filehandler as file
 import matching.match as match
 import os
 import math
+import time as t
 
 
 def run_tests(sample_dir):
@@ -13,13 +14,16 @@ def run_tests(sample_dir):
     sample_files = file.find_all_files(sample_dir)
     results = []  # [[success, correct, filename, time, confidence, found_id],...]
     for sample_file in sample_files:
+        t.sleep(1)  # prevent system overload influencing results by pausing for one second
         sample_file_path = os.path.join(sample_dir, sample_file)
         is_valid, song_id = file.get_song_id_from_filename(sample_file)
         if not is_valid:
             print "File %s doesn't have a valid filename, skipping" % sample_file
             continue
+        if song_id == 0:
+            continue
         success, confidences, found_song_id, result, time = match.match_file(sample_file_path)
-        correct = song_id is found_song_id or (not success and song_id is 0)
+        correct = song_id == found_song_id or (not success and song_id == 0)
         results.append([success, correct, sample_file, time, confidences[0][1], found_song_id])
     total_results = 0
     total_successful_results = 0
@@ -44,26 +48,26 @@ def run_tests(sample_dir):
                 total_correct_results += 1
                 total_correct_successful_results += 1
             else:
-                print "File %s was in correctly matched with a confidence of %f in %fs. (found %d)" % (result[2], result[4], result[3], result[5])
+                print "File %s was incorrectly matched with a confidence of %f in %fs. (found %d)" % (result[2], result[4], result[3], result[5])
     print "========================================================================"
     print " Tests run: %d" % total_results
     print " Tests successful: %d" % total_successful_results
     print " Tests correct: %d" % total_correct_results
     print "------------------------------------------------------------------------"
     print " Average time: %fs" % (total_time/total_results)
-    print " 95-percentile: %fs" % get_95_percentile(times)
+    print " 90-percentile: %fs" % get_90_percentile(times)
     print " Percentage correct of successful: %f" % ((float(total_correct_successful_results)/total_successful_results)*100)
     print " Percentage correct of total: %f" % ((float(total_correct_results)/total_results)*100)
     print "========================================================================"
 
 
-def get_95_percentile(times):
+def get_90_percentile(times):
     """
-    Berekent onder welk getal minimaal 95% van de getallen in de opgegeven array ligt
+    Berekent onder welk getal minimaal 90% van de getallen in de opgegeven array ligt
     :param times: array met getallen
-    :return: Het getal waaronder 95% van de getallen ligt
+    :return: Het getal waaronder 90% van de getallen ligt
     """
     times.sort()
     length = len(times)
-    last_5_percent = int(math.ceil(length * 0.95))
+    last_5_percent = int(math.ceil(length * 0.90))
     return times[last_5_percent - 1]
