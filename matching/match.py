@@ -8,19 +8,8 @@ import database.databasehelper as dbhelper
 import collections
 
 
-def match_file(path):
-    """
-    Matcht een bestand aan de origineel in de database
-    :rtype: bool, array([int, float]), int, string, float
-    :return: Match, confidences, song id, resultaat, tijd
-    :param path: Path to the file te match
-    """
+def match(signal):
     start_time = t.time()
-    sample_freq, signal = read(path)
-    if sample_freq != SAMPLE_FREQ:
-        print "########################################################################################################"
-        print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
-        print "########################################################################################################"
     intensity, freqs, time = fourier.apply_fourier(signal, NFFT_WINDOW, SAMPLE_FREQ, N_OVERLAP)
     peaks_array = peaks.find_peaks(intensity, PEAK_TIME_WINDOW, PEAK_FREQ_WINDOW)
     hashes = fingerprint.fingerprint(peaks_array, FINGERPRINT_TIME_WINDOW)
@@ -68,3 +57,18 @@ def match_file(path):
         return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
     else:
         return False, confidences, confidences[0][0], "Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+
+
+def match_file(path):
+    """
+    Matcht een bestand aan de origineel in de database
+    :rtype: bool, array([int, float]), int, string, float
+    :return: Match, confidences, song id, resultaat, tijd
+    :param path: Path to the file te match
+    """
+    sample_freq, signal = read(path)
+    if sample_freq != SAMPLE_FREQ:
+        print "########################################################################################################"
+        print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
+        print "########################################################################################################"
+    match(signal)
