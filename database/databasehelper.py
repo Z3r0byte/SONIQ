@@ -56,6 +56,11 @@ def get_song_by_id(id):
     cursor.execute(query, args)
     return cursor.fetchone()
 
+def get_all_songs():
+    query = "SELECT title, artist FROM songs"
+    cursor.execute(query)
+    return cursor.fetchall()
+
 
 def insert_hashes(fingerprints):
     query = "INSERT INTO fingerprints (fingerprint, song_id, time) VALUES (UNHEX(%s), %s, %s)"

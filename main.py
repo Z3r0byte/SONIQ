@@ -2,6 +2,7 @@ from __future__ import print_function
 from config import AUDIO_DIR
 import files.filehandler as files
 import tests.test as tests
+import server.server as server
 import sys
 import getopt
 
@@ -32,6 +33,6 @@ for opt, arg in opts:
             AUDIO_DIR = arg
         files.fingerprint_all(AUDIO_DIR)
     elif opt == "-s":
-        print("WIP")
+        server.start()
     else:
         help()

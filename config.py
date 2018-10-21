@@ -19,3 +19,6 @@ HOST = "localhost"
 DATABASE = "SONIQ"
 USER = "root"
 PASSWORD = "password"
+# Server
+SERVER_HOST = "0.0.0.0"
+SERVER_PORT = 5000
