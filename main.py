@@ -1,10 +1,13 @@
 from __future__ import print_function
+print("SONIQ is loading...")
 from config import AUDIO_DIR
 import files.filehandler as files
 import tests.test as tests
 import server.server as server
 import sys
 import getopt
+print("Ready")
+print()
 
 
 def help():
