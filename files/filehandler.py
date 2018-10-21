@@ -9,6 +9,7 @@ import fingerprinting.peaks as peaks
 import fingerprinting.fingerprint as fingerprint
 from scipy.io.wavfile import read
 import time as t
+import numpy as np
 
 
 def fingerprint_all(AUDIO_DIR):
@@ -86,3 +87,24 @@ def get_song_id_from_filename(filename):
         return True, int(re.search("([0-9]{4})", filename, flags=0).group(0))
     else:
         return False, 0
+
+
+def create_temp_folder():
+    if not os.path.isdir("temp"):
+        os.mkdir("temp")
+
+
+def create_search_file(search_id):
+    np.save("temp/%s" % search_id, None)
+
+
+def search_file_exists(search_id):
+    return os.path.isfile("temp/%s.npy" % search_id)
+
+
+def save_search_file(search_id, array):
+    np.save("temp/%s" % search_id, array)
+
+
+def read_save_file(search_id):
+    return np.load("temp/%s.npy" % search_id)

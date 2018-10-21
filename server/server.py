@@ -2,13 +2,17 @@ from config import SERVER_HOST, SERVER_PORT
 from flask import Flask, jsonify, request
 import database.databasehelper as dbhelper
 import uuid
+import files.filehandler as files
+import matching.match as match
 
 app = Flask(__name__)
 
 
 @app.route("/search/new", methods=["GET"])
 def generate_search_id():
-    return jsonify({"search_id": str(uuid.uuid4())})
+    search_id = str(uuid.uuid4())
+    files.create_search_file(search_id)
+    return jsonify({"search_id": search_id})
 
 
 @app.route("/songs/<song_id>", methods=["GET"])
@@ -29,7 +33,10 @@ def process_data():
         uuid.UUID(search_id, version=4)
     except ValueError:
         return "Ongeldig zoek-id", 403
-    return search_id
+    if not files.search_file_exists(search_id):
+        return "Zoekopdracht verlopen of nooit aangevraagd", 403
+    success, confidences, confidence, result, time = match.match(files.read_save_file(search_id))
+    return "%s in %fs" % (result, time)
 
 
 def start():
@@ -37,4 +44,5 @@ def start():
     print "| WARNING: Do not make this server externally available! It is not made to be secure and probably isn't. Use at your own risk! |"
     print "================================================================================================================================"
     print
+    files.create_temp_folder()
     app.run(host=SERVER_HOST, port=SERVER_PORT)
