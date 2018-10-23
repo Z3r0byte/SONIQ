@@ -22,7 +22,10 @@ def get_songs(song_id):
         songs = dbhelper.get_all_songs()
     else:
         songs = dbhelper.get_song_by_id(song_id)
-    return jsonify(songs)
+    responses = []
+    for song in songs:
+        responses.append({"song": song[0], "artist": song[1]})
+    return jsonify(responses)
 
 
 @app.route("/search/data", methods=["POST"])
