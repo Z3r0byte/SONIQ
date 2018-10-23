@@ -1,9 +1,10 @@
-from config import SERVER_HOST, SERVER_PORT
+from config import SERVER_HOST, SERVER_PORT, SAMPLE_FREQ
 from flask import Flask, jsonify, request
 import database.databasehelper as dbhelper
 import uuid
 import files.filehandler as files
 import matching.match as match
+import numpy as np
 
 app = Flask(__name__)
 
@@ -35,8 +36,18 @@ def process_data():
         return "Ongeldig zoek-id", 403
     if not files.search_file_exists(search_id):
         return "Zoekopdracht verlopen of nooit aangevraagd", 403
-    success, confidences, confidence, result, time = match.match(files.read_save_file(search_id))
-    return "%s in %fs" % (result, time)
+
+    file_data = files.read_save_file(search_id)
+    if file_data.size >= (SAMPLE_FREQ * 10):
+        return "Zoekopdracht te groot", 403
+    post_data = request.get_json(force=True)
+    audio_array = np.array(post_data['data'], dtype=np.int16)
+    total_array = np.append(file_data, audio_array)
+    files.save_search_file(search_id, total_array)
+
+    success, confidences, song_id, result, time = match.match(total_array)
+    response = {"success": success, "confidence": confidences[0][1], "song_id": song_id, "result": result, "time": time}
+    return jsonify(response)
 
 
 def start():
