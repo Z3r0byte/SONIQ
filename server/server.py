@@ -11,6 +11,7 @@ app = Flask(__name__)
 
 @app.route("/search/new", methods=["GET"])
 def generate_search_id():
+    files.cleanup()
     search_id = str(uuid.uuid4())
     files.create_search_file(search_id)
     return jsonify({"search_id": search_id})

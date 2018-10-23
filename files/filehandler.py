@@ -108,3 +108,11 @@ def save_search_file(search_id, array):
 
 def read_save_file(search_id):
     return np.load("temp/%s.npy" % search_id)
+
+
+def cleanup():
+    for f in os.listdir("temp"):
+        path = os.path.join("temp", f)
+        creation_time = os.path.getctime(path)
+        if (t.time() - creation_time) / 60 > 1:
+            os.unlink(path)
