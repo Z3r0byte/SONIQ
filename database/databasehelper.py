@@ -54,7 +54,8 @@ def get_song_by_id(id):
     query = "SELECT title, artist FROM songs WHERE id = %s"
     args = (id,)
     cursor.execute(query, args)
-    return cursor.fetchone()
+    return cursor.fetchall()
+
 
 def get_all_songs():
     query = "SELECT title, artist FROM songs"
