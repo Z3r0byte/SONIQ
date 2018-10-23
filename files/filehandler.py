@@ -78,7 +78,7 @@ def artist_title(filename):
 
 def get_song_id_from_filename(filename):
     """
-    Bepaald het 4-cijferige id van het nummer uit de bestandsnaam. Indien er geen geldig id in de bestandsnaam zit, is succes False en id 0.
+    Bepaalt het 4-cijferige id van het nummer uit de bestandsnaam. Indien er geen geldig id in de bestandsnaam zit, is succes False en id 0.
     :rtype: bool, int
     :param filename: De bestandsnaam met het song-id.
     :return: succes (bool), id (int)
@@ -95,7 +95,7 @@ def create_temp_folder():
 
 
 def create_search_file(search_id):
-    np.save("temp/%s" % search_id, None)
+    np.save("temp/%s" % search_id, np.empty(dtype=np.int16, shape=1))
 
 
 def search_file_exists(search_id):
