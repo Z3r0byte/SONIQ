@@ -49,7 +49,7 @@ def match(signal):
             break
     confidences.sort(key=lambda x: x[1])
     confidences.reverse()
-    matched_song = dbhelper.get_song_by_id(confidences[0][0])
+    matched_song = dbhelper.get_song_by_id(confidences[0][0])[0]
 
     if len(confidences) == 1:
         return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
@@ -71,4 +71,4 @@ def match_file(path):
         print "########################################################################################################"
         print "Warning! Sample frequency is not the same as the config value. There probably won't be a reliable match!"
         print "########################################################################################################"
-    match(signal)
+    return match(signal)
