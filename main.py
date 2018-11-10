@@ -11,7 +11,7 @@ print()
 
 
 def help():
-    print("SONIQ - ruisbestendige audio herkenning")
+    print("SONIQ - Ruisbestendige audio-herkenning")
     print("Gebruik: main.py [optie]")
     print("    -t test_map              Draai tests met fragmenten in de opgegeven map")
     print("    -f                       Indexeer alle .wav bestanden in AUDIO_DIR uit config.py")
