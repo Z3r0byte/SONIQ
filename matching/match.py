@@ -15,7 +15,7 @@ def match(signal, cursor=None):
     hashes = fingerprint.fingerprint(peaks_array, FINGERPRINT_TIME_WINDOW)
 
     if len(hashes) == 0:
-        return False, 0, 0, "Unable to generate hashes. Not enough peaks? No match.", (t.time() - start_time)
+        return False, [[0, 0]], 0, "Unable to generate hashes. Not enough peaks? No match.", (t.time() - start_time)
 
     fingerprint_data = []
     fingerprint_dictionary = {}
@@ -28,7 +28,7 @@ def match(signal, cursor=None):
         fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)
 
     if len(fingerprint_match_count) == 0:
-        return False, 0, 0, "Did not find any similarities in database. No match.", (t.time() - start_time)
+        return False, [[0, 0]], 0, "Did not find any similarities in database. No match.", (t.time() - start_time)
 
     confidences = []
     for match in fingerprint_match_count:
@@ -60,11 +60,18 @@ def match(signal, cursor=None):
         matched_song = dbhelper.get_song_by_id(confidences[0][0])[0]
 
     if len(confidences) == 1:
-        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (
+            matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time), matched_song[0], \
+               matched_song[1]
     elif confidences[0][1] > (2 * confidences[1][1]):
-        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (
+            matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time), matched_song[0], \
+               matched_song[1]
     else:
-        return False, confidences, confidences[0][0], "Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
+        return False, confidences, confidences[0][
+            0], "Unable to get reliable match. Best guess is %s by %s with a confidence of %f" % (
+                   matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time), matched_song[0], \
+               matched_song[1]
 
 
 def match_file(path):
