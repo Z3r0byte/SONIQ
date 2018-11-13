@@ -8,7 +8,7 @@ import database.databasehelper as dbhelper
 import collections
 
 
-def match(signal):
+def match(signal, cursor=None):
     start_time = t.time()
     intensity, freqs, time = fourier.apply_fourier(signal, NFFT_WINDOW, SAMPLE_FREQ, N_OVERLAP)
     peaks_array = peaks.find_peaks(intensity, PEAK_TIME_WINDOW, PEAK_FREQ_WINDOW)
@@ -22,15 +22,20 @@ def match(signal):
     for hash in hashes:
         fingerprint_data.append(hash[0])
         fingerprint_dictionary[hash[0]] = hash[1]
-    fingerprint_match_count = dbhelper.get_songs_with_fingerprints(
-        fingerprint_data)  # alleen de eerste honderd om tijd te besparen. Er is namelijk een grote kans dat het juiste lied ook een van de meeste overeenkomsten zal hebben
+    if cursor is not None:
+        fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data, cursor)
+    else:
+        fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data)
 
     if len(fingerprint_match_count) == 0:
         return False, 0, 0, "Did not find any similarities in database. No match.", (t.time() - start_time)
 
     confidences = []
     for match in fingerprint_match_count:
-        offsets = dbhelper.get_times_for_fingerprints_of_song(fingerprint_data, match[0])
+        if cursor is not None:
+            offsets = dbhelper.get_times_for_fingerprints_of_song(fingerprint_data, match[0], cursor)
+        else:
+            offsets = dbhelper.get_times_for_fingerprints_of_song(fingerprint_data, match[0])
 
         differences = []
         for offset in offsets:
@@ -49,7 +54,10 @@ def match(signal):
             break
     confidences.sort(key=lambda x: x[1])
     confidences.reverse()
-    matched_song = dbhelper.get_song_by_id(confidences[0][0])[0]
+    if cursor is not None:
+        matched_song = dbhelper.get_song_by_id(confidences[0][0], cursor)[0]
+    else:
+        matched_song = dbhelper.get_song_by_id(confidences[0][0])[0]
 
     if len(confidences) == 1:
         return True, confidences, confidences[0][0], "Most probable song is %s by %s with a confidence of %f" % (matched_song[0], matched_song[1], confidences[0][1]), (t.time() - start_time)
