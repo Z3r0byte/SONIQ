@@ -40,18 +40,19 @@ def get_songs(song_id):
 @app.route("/search/data", methods=["POST"])
 def process_data():
     search_id = request.headers.get("SEARCH_ID")
+    print "Processing request " + search_id + "..."
     if search_id is None:
-        return "Geen zoek-id opgegeven", 403
+        return "{ \"error\" : \"Geen zoek-id opgegeven\"}", 403
     try:
         uuid.UUID(search_id, version=4)
     except ValueError:
-        return "Ongeldig zoek-id", 403
+        return "{ \"error\" : \"Ongeldig zoek-id\"}", 403
     if not files.search_file_exists(search_id):
-        return "Zoekopdracht verlopen of nooit aangevraagd", 403
+        return "{ \"error\" : \"Zoekopdracht verlopen of nooit aangevraagd\"}", 403
 
     file_data = files.read_save_file(search_id)
-    if file_data.size >= (SAMPLE_FREQ * 10):
-        return "Zoekopdracht te groot", 403
+    if file_data.size > (SAMPLE_FREQ * 11):
+        return "{ \"error\" : \"Zoekopdracht te groot\"}", 403
     post_data = request.get_json(force=True)
     audio_array = np.array(post_data['data'], dtype=np.int16)
     total_array = np.append(file_data, audio_array)
