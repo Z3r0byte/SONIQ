@@ -64,6 +64,11 @@ def process_data():
     return jsonify(response)
 
 
+@app.errorhandler(505)
+def internal_server_error(e):
+    return "{\"error\": \"Er is een fout opgetreden tijdens het verwerken van je verzoek\"}", 500
+
+
 def start():
     print "================================================================================================================================"
     print "| WARNING: Do not make this server externally available! It is not made to be secure and probably isn't. Use at your own risk! |"
