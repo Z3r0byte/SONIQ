@@ -18,12 +18,13 @@ USE `soniq`;
 
 -- Structuur van  tabel soniq.fingerprints wordt geschreven
 CREATE TABLE IF NOT EXISTS `fingerprints` (
-  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
-  `song_id` smallint(5) unsigned NOT NULL DEFAULT 0,
-  `fingerprint` binary(8) NOT NULL DEFAULT '0\0\0\0\0\0\0\0',
-  `time` mediumint(8) unsigned DEFAULT 0,
-  KEY `id` (`id`),
-  KEY `fingerprint_index` (`fingerprint`)
+                                            `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+                                            `song_id` smallint(5) unsigned NOT NULL DEFAULT 0,
+                                            `fingerprint` binary(8) NOT NULL DEFAULT '0\0\0\0\0\0\0\0',
+                                            `time` mediumint(8) unsigned DEFAULT 0,
+                                            KEY `id` (`id`),
+                                            KEY `fingerprint_index` (`fingerprint`),
+                                            KEY `song_id_index` (`song_id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8;
 
 -- Data exporteren was gedeselecteerd
