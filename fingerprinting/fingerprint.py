@@ -18,7 +18,10 @@ def fingerprint(peaks, timewindow):
             peak2 = peaks[i+i2]
             if peak2[1] <= (peak[1] + timewindow):
                 hash = ["", 0]
-                hash[0] = hashlib.sha512(str(peak[0]) + "-" + str(peak2[0]) + "-" + str(peak2[1] - peak[1])).hexdigest()[0:16]  # hex encoding, dus 16 tekens is 8 bytes
+                hash[0] = hashlib.sha512(
+                    str(peak[0]) + "-" + str(peak2[0]) + "-" + str(peak2[1] - peak[1])).hexdigest()[
+                          0:14]  # hex encoding, dus 14 tekens is 7 bytes
+                hash[0] = int(hash[0], 16)
                 hash[1] = peak[1]
                 hashes.append(hash)
             else:

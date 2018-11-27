@@ -21,7 +21,7 @@ def match(signal, cursor=None):
     fingerprint_dictionary = {}
     for hash in hashes:
         fingerprint_data.append(hash[0])
-        fingerprint_dictionary[hash[0]] = hash[1]
+        fingerprint_dictionary[str(hash[0])] = hash[1]
     if cursor is not None:
         fingerprint_match_count = dbhelper.get_songs_with_fingerprints(fingerprint_data, cursor)
     else:
@@ -39,7 +39,7 @@ def match(signal, cursor=None):
 
         differences = []
         for offset in offsets:
-            differences.append(round(fingerprint_dictionary[str(offset[1]).lower()] - offset[2], -1))
+            differences.append(round(fingerprint_dictionary[str(offset[1])] - offset[2], -1))
 
         diff_freqs = collections.Counter(differences)
         total = 0

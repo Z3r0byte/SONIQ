@@ -2,7 +2,7 @@
 # Flush the database if you change any of the values indicated with an [!] to prevent inaccurate results
 
 # Algemeen
-AUDIO_DIR = "Audio Samples/Test set"
+AUDIO_DIR = "Audio Samples/Papa"
 # Spectrogram [!]
 SAMPLE_FREQ = 44100
 NFFT_WINDOW = 1024
@@ -17,7 +17,7 @@ MIN_CONFIDENCE_FOR_STOP = 10
 # Database
 HOST = "localhost"
 DATABASE = "SONIQ"
-USER = "root"
+USER = "postgres"
 PASSWORD = "password"
 # Server
 SERVER_HOST = "0.0.0.0"

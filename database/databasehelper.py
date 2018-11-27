@@ -1,7 +1,8 @@
 from config import HOST, USER, PASSWORD, DATABASE
-import mysql.connector as mysql
+import psycopg2
 
-conn = mysql.connect(host=HOST, user=USER, passwd=PASSWORD, database=DATABASE, charset='utf8')
+conn = psycopg2.connect(host=HOST, user=USER, password=PASSWORD, dbname=DATABASE)
+conn.set_session(autocommit=True)
 cursor = conn.cursor()
 
 
@@ -16,7 +17,7 @@ def insert_song(filename, title="", artist="", conn=conn, cursor=cursor):
 
 
 def fingerprint_song(song_id, conn=conn, cursor=cursor):
-    query = "UPDATE songs SET fingerprinted = 1 WHERE id = %s"
+    query = "UPDATE songs SET fingerprinted = true WHERE id = %s"
     args = (song_id,)
     cursor.execute(query, args)
     conn.commit()
@@ -64,13 +65,13 @@ def get_all_songs(cursor=cursor):
 
 
 def insert_hashes(fingerprints, conn=conn, cursor=cursor):
-    query = "INSERT INTO fingerprints (fingerprint, song_id, time) VALUES (UNHEX(%s), %s, %s)"
+    query = "INSERT INTO fingerprints (fingerprint, song_id, time) VALUES (%s, %s, %s)"
     cursor.executemany(query, fingerprints)
     conn.commit()
 
 
 def get_songs_with_fingerprints(fingerprints, cursor=cursor):
-    placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
+    placeholder = ",".join(["%s"] * len(fingerprints))  # placeholder strings maken voor in query
     query = "SELECT song_id, COUNT(*) as cnt FROM (SELECT song_id FROM fingerprints WHERE fingerprint IN (%s) GROUP BY song_id,fingerprint) tmp GROUP BY song_id ORDER BY cnt DESC LIMIT 10" % placeholder
     args = tuple(fingerprints)
     cursor.execute(query, args)
@@ -78,8 +79,9 @@ def get_songs_with_fingerprints(fingerprints, cursor=cursor):
 
 
 def get_times_for_fingerprints_of_song(fingerprints, song_id, cursor=cursor):
-    placeholder = ",".join(["UNHEX(%s)"] * len(fingerprints))  # placeholder strings maken voor in query
-    query = "SELECT song_id, HEX(fingerprint), time FROM fingerprints WHERE fingerprint IN (%s) AND song_id = %s GROUP BY song_id,fingerprint" % (placeholder, song_id)
+    placeholder = ",".join(["%s"] * len(fingerprints))  # placeholder strings maken voor in query
+    query = "SELECT song_id, fingerprint, time FROM fingerprints WHERE fingerprint IN (%s) AND song_id = %s GROUP BY song_id,fingerprint,time" % (
+    placeholder, song_id)
     args = tuple(fingerprints)
     cursor.execute(query, args)
     return cursor.fetchall()
