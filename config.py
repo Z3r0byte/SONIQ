@@ -14,6 +14,9 @@ PEAK_FREQ_WINDOW = 10
 FINGERPRINT_TIME_WINDOW = 10
 # Matchen:
 MIN_CONFIDENCE_FOR_STOP = 10
+# Testen:
+NOISE_SOURCE_FILE = "Audio Samples/Ruis.wav"
+NOISE_DESTINATION_FOLDER = "Audio Samples/Gegenereerde tests"
 # Database
 HOST = "localhost"
 DATABASE = "SONIQ"
