@@ -25,7 +25,7 @@ def run_tests(sample_dir):
             continue
         if song_id == 0:
             continue
-        success, confidences, found_song_id, result, time = match.match_file(sample_file_path)
+        success, confidences, found_song_id, result, time, title, artist = match.match_file(sample_file_path)
         correct = song_id == found_song_id or (not success and song_id == 0)
         results.append([success, correct, sample_file, time, confidences[0][1], found_song_id])
     total_results = 0
