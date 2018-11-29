@@ -89,6 +89,14 @@ def get_song_id_from_filename(filename):
         return False, 0
 
 
+def get_test_data_from_filename(filename):
+    filename = filename[:-4]
+    space_index = filename.find(' ')
+    if space_index == -1:
+        return False, 0, 0
+    return True, int(filename[:space_index]), int(filename[space_index + 1:])
+
+
 def create_temp_folder():
     if not os.path.isdir("temp"):
         os.mkdir("temp")
