@@ -133,6 +133,10 @@ def run_tests_with_noise(test_folder):
 
 
 def check_sample_freq(sample_freq):
+    """
+    Controleer of de bemonsteringsfrequentie gelijk is aan die van fragmenten toegevoegd aan de database
+    :param sample_freq: de bemonsteringsfrequentie om te controleren
+    """
     if sample_freq != SAMPLE_FREQ:
         print(
             "########################################################################################################")
