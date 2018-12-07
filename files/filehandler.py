@@ -90,6 +90,11 @@ def get_song_id_from_filename(filename):
 
 
 def get_test_data_from_filename(filename):
+    """
+    Haal het id en de SNR uit de bestandsnaam
+    :param filename: de bestandsnaam met het formaat [id] [SNR].wav
+    :return: [geldig (boolean)] , [song_id (int)], [SNR (int)]
+    """
     filename = filename[:-4]
     space_index = filename.find(' ')
     if space_index == -1:
@@ -119,6 +124,9 @@ def read_save_file(search_id):
 
 
 def cleanup():
+    """
+    Verwijdert alle bestanden uit de temp map die ouder zijn dan 60 seconden
+    """
     for f in os.listdir("temp"):
         path = os.path.join("temp", f)
         creation_time = os.path.getctime(path)
