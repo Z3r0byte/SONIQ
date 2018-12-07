@@ -1,36 +1,36 @@
 def find_peaks(spectrum, xwindow, ywindow, min_amp=10):
     """
-
-    :param spectrum: the 2-D spectrum array
-    :param xwindow: search-window in time in which to search for higher values
-    :param ywindow: search-window in frequency in which to search for higher values
+    Met deze functie worden pieken gezocht in de opgegeven data
+    :param spectrum: de 2-D sprectrum Array
+    :param xwindow: de hoeveelheid tijdblokken waarin rondom een punt gezocht wordt naar een hogere waarde
+    :param ywindow: de hoeveelheid frequenties waarin rondom een punt gezocht wordt naar een hogere waarde
     :return:
-    :rtype: 2-D array(freq, time) of peaks in spectrum
+    :rtype: 2-D array(freq, time) van pieken in :param spectrum
     """
     peaks = []
     freq_length = spectrum[0].size
     spectrum_length = (spectrum.size // spectrum[0].size)
-    for spectrum_row in range(0, spectrum_length):  # select row
+    for spectrum_row in range(0, spectrum_length):
         freq_array = spectrum[spectrum_row]
-        for freq_array_index in range(0, freq_length):  # select point in row to test if peak
+        for freq_array_index in range(0, freq_length):  # selecteer een punt om te testen uit de geselecteerde rij
             if freq_array[freq_array_index] < min_amp:
                 continue
-            for spectrum_row2 in range(-ywindow, ywindow + 1):  # select test-row to check for higher values
+            for spectrum_row2 in range(-ywindow, ywindow + 1):
                 index_sum = spectrum_row + spectrum_row2
-                if index_sum < 0 or index_sum >= spectrum_length:  # check if index is out of bounds
+                if index_sum < 0 or index_sum >= spectrum_length:  # check of de index geldig is, zoniet, door naar de volgende iteratie
                     continue
 
                 freq_array2 = spectrum[index_sum]
-                for freq_array_index2 in range(-xwindow, xwindow + 1):  # select test-point from test-row to check for higher values
-                    index_sum = freq_array_index + freq_array_index2  # check if index is out of bounds
+                for freq_array_index2 in range(-xwindow, xwindow + 1):
+                    index_sum = freq_array_index + freq_array_index2  # check of de index geldig is, zoniet, door naar de volgende iteratie
                     if index_sum < 0 or index_sum >= freq_length:
                         continue
-                    # check if selected point is bigger than the point being tested
+                    # Als het geselecteerde punt groter is dan het punt dat getest wordt is het geteste punt geen piek en stopt de loop
                     if freq_array2[index_sum] > freq_array[freq_array_index]:
                         break
                 else:
                     continue
                 break
-            else:  # if the loop above doesn't kill itself, eg no bigger value found, then add current test point to peaks
+            else:  # Als de bovenstaande loop zichzelf niet afsluit, is er geen grotere waarde gevonden en is het onderzochte punt dus een piek
                 peaks.append([spectrum_row, freq_array_index])
     return peaks
