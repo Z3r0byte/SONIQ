@@ -3,7 +3,7 @@ import hashlib
 
 def fingerprint(peaks, timewindow):
     """
-    :returns een array van arrays met twee waarden (vingerafdrukken). De eerste waarde is een SHA512 bits hash en de tweede waarde is het tijdstip van de hash
+    :returns een array van arrays met twee waarden (vingerafdrukken). De eerste waarde is een gedeelte van de SHA512 hash en de tweede waarde is het tijdstip van de hash
     :param peaks: de 2D array met pieken
     :param xwindow: Hoever vooruit gekeken moet worden om twee pieken te matchen tot een vingerafdruk
     :return:
