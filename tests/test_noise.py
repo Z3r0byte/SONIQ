@@ -11,6 +11,15 @@ from config import SAMPLE_FREQ, NOISE_SOURCE_FILE, NOISE_DESTINATION_FOLDER, AUD
 
 
 def add_noise(input, noise, length, wanted_ratio):
+    """
+    Voegt ruis toe aan een geluidsfragment
+    :param input: Het ruisloze geluid
+    :param noise: De ruis (kan bijvoorbeeld een ander geluidsfragment zijn)
+    :param length: De lengte van het te genereren fragment, dient minimaal even lang te zijn als de input en/of ruis
+    :param wanted_ratio: De gewenste signaal-ruisverhouding
+    :return: Een geluidsfragment bestaande uit (een deel van) :param input en :param noise, waarbij :param noise
+        is vermenigvuldigd met een factor die zo gekozen is dat de gewenste SNR behaald wordt.
+    """
     length = SAMPLE_FREQ * length
     if length >= len(noise) or length >= len(input):
         raise ValueError("De gedefineerde lengte kan niet langer zijn dan (één van) de audiofragmenten")
@@ -37,6 +46,10 @@ def add_noise(input, noise, length, wanted_ratio):
 
 
 def create_with_noise(amount):
+    """
+    Genereert een bepaald aantal bestanden met ruis in NOISE_DESTINATION_FOLDER uit AUDIO_DIR met als ruis NOISE_SOURCE_FILE
+    :param amount: het aantal te genereren bestanden
+    """
     print("Preparing generation of test files")
     sample_files = file.find_all_files(AUDIO_DIR)
     sample_files = random.sample(sample_files, int(amount))
@@ -57,7 +70,8 @@ def create_with_noise(amount):
         sample_freq, input = read(sample_file_path)
         check_sample_freq(sample_freq)
 
-        for ratio in range(-6, 7, 3):
+        # Bestanden aanmaken met ruis met SNR -3, 0, 3 en 6 dB
+        for ratio in range(-3, 7, 3):
             audio_noise = add_noise(input, noise, 10, ratio)
             output_file = os.path.join(NOISE_DESTINATION_FOLDER, ("%d %d.wav" % (song_id, ratio)))
             write(output_file, SAMPLE_FREQ, audio_noise)
