@@ -2,6 +2,13 @@ import matplotlib.pyplot as plt
 
 
 def plot_specgram(signal, NFFT, sample_freq, noverlap):
+    """
+    Functie die gebruikt kan worden voor het plotten van een spectrogram tijdens debuggen
+    :param signal: de array met het signaal
+    :param NFFT: blokgrootte waarop de transformatie wordt toegepast
+    :param sample_freq: De bemonsteringsfrequentie
+    :param noverlap: Hoeveel punten de blokken elkaar moeten overlappen
+    """
     plt.specgram(signal, NFFT=NFFT, Fs=sample_freq, noverlap=noverlap)
     plt.show()
 
@@ -24,6 +31,13 @@ def apply_fourier(signal, NFFT, sample_freq, noverlap):
 
 
 def plot_intensity_of_freq_over_time(intensity, time, freqs, freq_index):
+    """
+    Functie die gebruikt kan worden om een grafiek te plotten van de sterkte van een bepaalde frequentie uitgezet tegen de tijd
+    :param intensity: De ruwe data van het spectrogram
+    :param time: De tijden
+    :param freqs: De frequenties
+    :param freq_index:  De index van de frequentie in :param freqs die geplot moet worden
+    """
     freq = freqs[freq_index]
     intensity = intensity[freq_index]
     plt.clf()
