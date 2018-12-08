@@ -37,7 +37,7 @@ for opt, arg in opts:
     if opt == "-t":
         tests.run_tests(arg)
     elif opt == "-n":
-        tests.run_tests_with_noise(arg)
+        noise.run_tests_with_noise(arg)
     elif opt == "-g":
         noise.create_with_noise(arg)
     elif opt == "-f":
