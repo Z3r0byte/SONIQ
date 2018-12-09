@@ -11,7 +11,8 @@ Muziekherkenningssoftware met ruisbestendigheid.
 ## Instructies:
 1. Download deze repository
 2. Voer `setup.py` uit om alle missende dependencies te installeren
-3. Voer `main.py` uit
+3. Voer de juiste instellingen in in `config.py`
+4. Voer `main.py` uit
 
 ## App
 Bij deze software hoort ook een Android app, deze kun je hier vinden: https://github.com/Z3r0byte/SONIQ-app
