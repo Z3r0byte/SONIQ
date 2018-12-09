@@ -17,4 +17,4 @@ Muziekherkenningssoftware met ruisbestendigheid.
 Bij deze software hoort ook een Android app, deze kun je hier vinden: https://github.com/Z3r0byte/SONIQ-app
 
 -----------------------------------
-Dit profielwerkstuk is geschreven voor het vak Natuurkunde in opdracht van het Commanderij College. In deze repository vind je ook het verslag zelf. Wees slim en plaggieer niet. Dit project gebruiken als basis voor een eigen verslag mag, maar overleg dit wel eerst met je begeleider om moeilijkgeden achteraf te voorkomen.
+Dit profielwerkstuk is geschreven voor het vak Natuurkunde in opdracht van het Commanderij College. In deze repository vind je ook het verslag zelf. Wees slim en plaggieer niet. Dit project gebruiken als basis voor een eigen verslag mag, maar overleg dit wel eerst met je begeleider om moeilijkheden achteraf te voorkomen.
